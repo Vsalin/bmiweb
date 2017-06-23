@@ -1,0 +1,67 @@
+doctype html
+html(lang="en")
+  head
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  link(href='/css/style.css', rel='stylesheet')
+
+  title calculate bmi 
+body
+    h2 Calculate your BMI 
+    form(action="/" method="get" id="form")
+        label Weigth : 
+        input(type="number" name="wei" value="wei")
+        label Height :
+        input(type="number" name="hei" value="hei")
+        label Height :
+        button(type="submit") Calculate
+
+    p Your BMI is : #{bmi}
+
+    table
+        tr
+            th
+                p BMI kg/m2
+            th
+                p เกณฑ์
+            th
+                p ภาวะเสี่ยง
+        tr
+            td
+                p น้อยกว่า 18.50
+            td
+                p น้ำหนักน้อย / ผอม
+            td
+                p มากกว่าคนปกติ
+        tr
+            td
+                p 18.50 - 22.90
+            td
+                p น้ำหนักปกติ
+            td
+                p เท่าคนปกติ
+        tr
+            td
+                p 23 - 24.90
+            td
+                p ท้วม / โรคอ้วนระดับ 1
+            td
+                p อันตรายระดับ 1
+        tr
+            td
+                p 25 - 29.90
+            td
+                p อ้วน / โรคอ้วนระดับ 2
+            td
+                p อันตรายระดับ 2        
+        tr
+            td
+                p มากกว่า30
+            td
+                p อ้วนมาก / โรคอ้วนระดับ 3
+            td
+                p อันตรายระดับ 3
+         
+         
+         
+         
+        

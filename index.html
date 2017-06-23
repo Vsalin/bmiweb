@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+  <head>
+      <link href="https://fonts.googleapis.com/css?family=Athiti|Raleway" rel="stylesheet">
+    <title>BMI Calculate</title>
+    <style>
+
+    head{
+        background:#9eb254
+    }
+    h1{
+        text-align: center;
+        margin: 30px 30px 30px 30px;
+    }
+    form label{font-size:25 }
+    table{width: 70%}
+    table, td, th {    
+    border: 2px solid #f1ffb8;
+    text-align: left;
+    }
+    table {
+        border-collapse: collapse;
+        width: 80%;
+        font-size:25; 
+        margin: 0 auto;
+    }
+    th{
+        padding: 10px;
+        background-color:  	#9eb254;
+    }
+    td {
+        padding: 10px;
+    }
+    tr {
+        background-color:	#f1ffbe;
+    }
+     tr:hover {
+        background-color:	#dee1d3;
+    }
+    form{
+        margin: 20px 500px 20px 500px;
+    }
+    input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 50%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 85px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size:25; 
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+/*div {
+    background-color: #f2f2f2;
+    padding: 20px;
+}*/
+
+#data {
+    font-size:25;
+    text-align:center;
+}
+*{
+    font-family: 'Raleway';
+    font-family: 'Athiti';
+    font-weight: bold;
+}
+
+    </style>
+  </head>
+   <body>
+      <h1>Calcualte Your BMI ! </h1>   
+     
+    <form method="get" action="/">
+      <label >Weight(kg.)</label>
+      <input type="text"  name="weight" id="weights" ></input>
+      <label >Height(cm.)</label>
+      <input type="text" name="height" id="heights"></input>
+      <input type = "submit" value = "Calculate" >
+
+    </form>
+
+    <p id= "data"></p>
+
+<div class="table-content">
+<table id="location" border='1'>
+    <tr>
+        <th>BMI kg/m2</th>
+        <th>เกณฑ์</th>
+        <th>ภาวะเสี่ยง</th>
+    </tr>
+   <tr id ="1">
+    <td>น้อยกว่า 18.50</td>
+    <td>น้ำหนักน้อย /ผอม</td>
+    <td>มากกว่าคนปกติ</td>
+  </tr>
+  <tr id ="2">
+    <td>18.50 - 22.90</td>
+    <td>ปกติ (สุขภาพดี)</td>
+    <td>ปกติ</td>
+  </tr>
+  <tr id ="3">
+    <td>23 - 24.90</td>
+    <td>ท้วม / โรคอ้วนระดับ 1</td>
+    <td>อันตรายระดับ 1</td>
+  </tr>
+  <tr  id ="4">
+    <td>25 - 29.90</td>
+    <td>อ้วน / โรคอ้วนระดับ 2</td>
+    <td>อันตรายระดับ 2</td>
+  </tr>
+  <tr  id ="5">
+    <td>มากกว่า 30</td>
+    <td>อ้วน / โรคอ้วนระดับ 3</td>
+    <td>อันตรายระดับ 3</td>
+  </tr>
+</table>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  $(function () {
+  $('form').submit(function(e){
+    e.preventDefault();
+    wei= $('#weights').val();
+    hei= $('#heights').val();
+
+    $.ajax({
+      method: "POST",
+      url: "/show",
+      data: JSON.stringify({weights : wei,heights : hei}),
+      contentType: "application/JSON",  
+      dataType: "JSON"
+    }).done(function(data) {  
+            $("#data").html("Your BMI is: "+data.bmi);
+            var subStr = data.bmi;
+            document.getElementById('1').style.backgroundColor = '#f1ffbe'
+            document.getElementById('2').style.backgroundColor = '#f1ffbe'
+            document.getElementById('3').style.backgroundColor = '#f1ffbe'
+            document.getElementById('4').style.backgroundColor = '#f1ffbe'
+             document.getElementById('5').style.backgroundColor = '#f1ffbe'
+            if(subStr<18.50){
+                document.getElementById('1').style.backgroundColor = '#e2e360'
+            }else if(subStr>=18.5 && subStr<22.90){
+                document.getElementById('2').style.backgroundColor = '#e2e360'
+            }else if(subStr>=23.00 && subStr<24.90){
+                document.getElementById('3').style.backgroundColor = '#e2e360'
+            }else if(subStr>=24.90 && subStr<30.00){
+                document.getElementById('4').style.backgroundColor = '#e2e360'
+            }else{
+                document.getElementById('5').style.backgroundColor = '#e2e360'
+            }
+            
+        })
+        .fail(function (jqXHR, exception) {
+    var msg = '';
+    if (jqXHR.status === 0) {
+        msg = 'Not connect.\n Verify Network.';
+    } else if (jqXHR.status == 404) {
+        msg = 'Requested page not found. [404]';
+    } else if (jqXHR.status == 500) {
+        msg = 'Internal Server Error [500].';
+    } else if (exception === 'parsererror') {
+        msg = 'Requested JSON parse failed.';
+    } else if (exception === 'timeout') {
+        msg = 'Time out error.';
+    } else if (exception === 'abort') {
+        msg = 'Ajax request aborted.';
+    } else {
+        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+    }
+    alert(msg);
+})
+    
+    })
+});
+</script>
+ 
+ </body>
+</html>
+
+<!--<h1 id="id1">My Heading 1</h1>
+
+<button type="button" 
+onclick="document.getElementById('id1').style.color = 'red'">
+Click Me!</button> -->
